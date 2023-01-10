@@ -1,0 +1,76 @@
+## Pacotes
+pacotes <- c("stats","cluster","RColorBrewer","ggplot2","ggfortify","dplyr","tidyverse",
+             "data.table","DataExplorer","tidyr","tibble","foreign","readr","janitor","geobr","cepR","abjutils",
+             "corrplot","rvest","","dplyr","glue","purrr","xml2","selectr","robotstxt","forcats",
+             "rstatix","xtable","psych","factoextra","ggpubr","openxlsx","gganimate","plotly")
+
+## Instalador automatico de pacotes
+
+if(sum(as.numeric(!pacotes %in% installed.packages()))!= 0){
+  instalador <- pacotes[!pacotes %in% installed.packages()]
+  for (i in 1: length(instalador)) {
+    install.packages(instalador,dependencies = T)
+    break()}
+  sapply(pacotes, require, character = T)
+} else {
+  sapply(pacotes,require,character = T)
+}
+
+
+## Paths
+paths_allowed(
+  paths = c("https://www.amazon.com.br/gp/bestsellers/grocery/ref=zg_bs_nav_0")
+)
+
+## Read website
+best_seller_groceries <- read_html("https://www.amazon.com.br/gp/bestsellers/grocery/ref=zg_bs_nav_0")
+
+
+## Brand Name
+Products <- best_seller_groceries %>%
+      html_nodes("._cDEzb_p13n-sc-css-line-clamp-3_g3dy1") %>%
+      html_text()
+
+## Price
+prices <- best_seller_groceries %>%
+  html_nodes("._cDEzb_p13n-sc-price_3mJ9Z") %>%
+  html_text()
+      
+## Create data frame
+dadosamazon <- data.frame(Products,prices)
+
+## Loop
+
+Name <- lapply(paste0('https://www.amazon.com.br/gp/bestsellers/grocery/19778005011/ref=zg_bs_nav_grocery', index= 1:3),
+               function(url){
+                 url %>% read_html() %>% 
+                   html_nodes("._cDEzb_p13n-sc-css-line-clamp-3_g3dy1") %>% 
+                   html_text() %>%
+                   gsub('[\r\n\t]', '', .)
+                 
+               })
+
+
+Price <- lapply(paste0("https://www.amazon.com.br/gp/bestsellers/grocery/19778005011/ref=zg_bs_nav_grocery", index= 1:3),
+                function(url){
+                  url %>% read_html() %>% 
+                    html_nodes("._cDEzb_p13n-sc-price_3mJ9Z") %>% 
+                    html_text() %>%
+                    gsub('[\r\n\t]', '', .)
+                  
+                })
+
+
+Tag <- lapply(paste0("https://www.amazon.com.br/gp/bestsellers/grocery/19778005011/ref=zg_bs_nav_grocery", index= 1:3),
+                function(url){
+                  url %>% read_html() %>% 
+                    html_nodes(".zg-bdg-text") %>% 
+                    html_text() %>%
+                    gsub('[\r\n\t]', '', .)
+                  
+                })
+
+Price <- unlist(Price)
+Name <- unlist(Name)
+Tag <- unlist(Tag)
+DF <- as.data.frame(cbind(Name, Price,Tag))
