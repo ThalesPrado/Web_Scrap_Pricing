@@ -15,10 +15,11 @@
 
 Here a picture of an example of a final output of the exercise
 
-src="https://user-images.githubusercontent.com/83819650/211564709-224f22ee-9086-4272-9c15-6c270b869158.png"
+<img width="357" alt="sni" src="https://user-images.githubusercontent.com/83819650/211567619-dd1fe1f2-c38a-450a-a8c3-e8bbf3040666.png">
 
 
 ***Main goal of the project is to bring data in terms of prices and items from amazon to run some comparison between other online channels***.
 
 
 Thank you 🙏
+
